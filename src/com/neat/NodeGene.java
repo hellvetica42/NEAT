@@ -17,6 +17,8 @@ public class NodeGene {
     ArrayList<ConnectionGene> outputs = new ArrayList<>();
     ArrayList<NodeGene> connectedNodes = new ArrayList<>();
 
+    
+
     public NodeGene(int innovation, TYPE type, Random random){
         this.innovation = innovation;
         this.type = type;

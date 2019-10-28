@@ -22,24 +22,22 @@ public class GenomePrintTest {
         }
 
 
-
         genome.addNodeGene(TYPE.OUTPUT);
 
         genome.addNodeGene();
 
-        genome.addConnectionGene(genome.getNodeGenes().get(1), genome.getNodeGenes().get(2));
+        genome.addConnectionGene(genome.getNodeGenes().get(1), genome.getNodeGenes().get(4));
         genome.addConnectionGene(genome.getNodeGenes().get(2), genome.getNodeGenes().get(4));
         genome.addConnectionGene(genome.getNodeGenes().get(3), genome.getNodeGenes().get(4));
         genome.addConnectionGene(genome.getNodeGenes().get(2), genome.getNodeGenes().get(5));
         genome.addConnectionGene(genome.getNodeGenes().get(5), genome.getNodeGenes().get(4));
         genome.addConnectionGene(genome.getNodeGenes().get(1), genome.getNodeGenes().get(5));
 
-
-        int input = GenomePrinter.countNodesByType(genome, TYPE.INPUT);
-        int hidden = GenomePrinter.countNodesByType(genome, TYPE.HIDDEN);
-        int output = GenomePrinter.countNodesByType(genome, TYPE.OUTPUT);
-        System.out.printf("INPUT: %d \nOUTPUT: %d \nHIDDEN: %d\n", input, output, hidden);
         GenomePrinter.printGenome(genome, "./before.png");
+
+        genome.addNodeMutation();
+
+        GenomePrinter.printGenome(genome, "./after.png");
     }
     
 }

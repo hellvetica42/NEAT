@@ -9,7 +9,7 @@ import java.util.Random;
  * @author Petar
  */
 public class Genome {
-    Random random = new Random();
+    Random random; 
     
     double fitness = 0;
 
@@ -22,6 +22,7 @@ public class Genome {
         this.outputCount = outputCount;
         connectionGenes = new HashMap<>();
         nodeGenes = new HashMap<>();
+        random = new Random();
     }
 
     public Genome(){
@@ -63,7 +64,7 @@ public class Genome {
     }
     
     public void addNodeMutation(){
-        ConnectionGene toDisable = connectionGenes.get(random.nextInt(connectionGenes.size()));
+        ConnectionGene toDisable = getRandomConnectionGene();
         toDisable.disable();
         NodeGene newNode = addNodeGene();
         addConnectionGene(toDisable.from, newNode, 1);
@@ -71,8 +72,17 @@ public class Genome {
     }
     
     NodeGene getRandomNode(){
-        //input and output nodes are added first so we can isolate the hidden ondes
-        return nodeGenes.get(random.nextInt(nodeGenes.size()));
+        Integer i;
+        i = (Integer)nodeGenes.keySet().toArray()[random.nextInt(nodeGenes.keySet().size())];
+
+        return nodeGenes.get(i);
+    }
+
+    ConnectionGene getRandomConnectionGene(){
+        Integer i;
+        i = (Integer)connectionGenes.keySet().toArray()[random.nextInt(connectionGenes.keySet().size())];
+
+        return connectionGenes.get(i);
     }
     
     public void addConnectionMutation(){
