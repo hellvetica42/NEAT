@@ -1,4 +1,4 @@
-package neat;
+package com.neat;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -11,19 +11,19 @@ public class NodeGene {
     
     Random random;
     
-    NodeType type;
+    TYPE type;
     
     ArrayList<ConnectionGene> inputs = new ArrayList<>();
     ArrayList<ConnectionGene> outputs = new ArrayList<>();
     ArrayList<NodeGene> connectedNodes = new ArrayList<>();
 
-    public NodeGene(int innovation, NodeType type, Random random){
+    public NodeGene(int innovation, TYPE type, Random random){
         this.innovation = innovation;
         this.type = type;
         this.random = random;
     }
     public NodeGene(int innovation, Random random){
-        this(innovation, NodeType.HIDDEN, random);
+        this(innovation, TYPE.HIDDEN, random);
         
     }
     
@@ -43,5 +43,13 @@ public class NodeGene {
     
     NodeGene copy(){
         return new NodeGene(innovation, type, random);
+    }
+    
+    public TYPE getType(){
+	    return this.type;
+    }
+
+    public int getId(){
+        return innovation;
     }
 }

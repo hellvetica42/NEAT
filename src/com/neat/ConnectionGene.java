@@ -1,4 +1,4 @@
-package neat;
+package com.neat;
 
 import java.util.Random;
 
@@ -35,9 +35,24 @@ public class ConnectionGene {
         enable = true;
     }
 
+    public boolean isEnabled(){
+        return enable;
+    }
+
     public ConnectionGene copy() {
         return new ConnectionGene(from, to, innovation, random);
     }
     
+   public NodeGene getFromNode(){
+       return from;
+   } 
+
+   public NodeGene getToNode(){
+       return to;
+   }
+
+   public double getWeight(){
+       return weight;
+   }
     
 }

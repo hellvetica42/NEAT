@@ -1,4 +1,4 @@
-package neat;
+package com.neat;
 
 import java.util.Random;
 
@@ -12,6 +12,7 @@ public class NEAT {
    
     public static void main(String[] args) {
         // TODO code application logic here
+        System.out.println("NEAT running");
     }
     
 }

@@ -1,8 +1,8 @@
-package neat;
+package com.neat;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+
 
 /**
  *
@@ -13,57 +13,56 @@ public class Genome {
     
     double fitness = 0;
 
-    public double getFitness() {
-        return fitness;
-    }
-
-    public void setFitness(double fitness) {
-        this.fitness = fitness;
-    }
     
     int inputCount, outputCount;
     int connectionInnovation = 1, nodeInnovation = 1;
     
-    HashMap<Integer, ConnectionGene> connectionGenes;
-
-    public HashMap<Integer, ConnectionGene> getConnectionGenes() {
-        return connectionGenes;
-    }
-
-    public HashMap<Integer, NodeGene> getNodeGenes() {
-        return nodeGenes;
-    }
-    HashMap<Integer, NodeGene> nodeGenes;
-    
-    Genome(){
+    public Genome(int inputCount, int outputCount){
+        this.inputCount = inputCount;
+        this.outputCount = outputCount;
         connectionGenes = new HashMap<>();
         nodeGenes = new HashMap<>();
     }
 
-    NodeGene addNodeGene(){
+    public Genome(){
+        this(1,1);
+    }
+
+    HashMap<Integer, ConnectionGene> connectionGenes;
+
+    HashMap<Integer, NodeGene> nodeGenes;
+    
+
+    public NodeGene addNodeGene(){
         NodeGene newNode = new NodeGene(nodeInnovation++, random);
         nodeGenes.put(newNode.innovation, newNode);
         return newNode;
     }
-    
-    NodeGene addNodeGene(NodeGene newNode){
+
+    public NodeGene addNodeGene(TYPE type){
+        NodeGene newNode = new NodeGene(nodeInnovation++, type, random);
         nodeGenes.put(newNode.innovation, newNode);
         return newNode;
     }
     
-    void addConnectionGene(ConnectionGene newConnectionGene){
+    public NodeGene addNodeGene(NodeGene newNode){
+        nodeGenes.put(newNode.innovation, newNode);
+        return newNode;
+    }
+    
+    public void addConnectionGene(ConnectionGene newConnectionGene){
         connectionGenes.put(newConnectionGene.innovation, newConnectionGene);
     }
     
-    void addConnectionGene(NodeGene from, NodeGene to){
-        connectionGenes.put(connectionInnovation, new ConnectionGene(from, to, connectionInnovation++, random));
+    public void addConnectionGene(NodeGene from, NodeGene to){
+        addConnectionGene(from, to, random.nextDouble());
     }
     
-    void addConnectionGene(NodeGene from, NodeGene to, double weight){
+    public void addConnectionGene(NodeGene from, NodeGene to, double weight){
         connectionGenes.put(connectionInnovation, new ConnectionGene(from, to, connectionInnovation++, weight, random));
     }
     
-    void addNodeMutation(){
+    public void addNodeMutation(){
         ConnectionGene toDisable = connectionGenes.get(random.nextInt(connectionGenes.size()));
         toDisable.disable();
         NodeGene newNode = addNodeGene();
@@ -76,7 +75,7 @@ public class Genome {
         return nodeGenes.get(random.nextInt(nodeGenes.size()));
     }
     
-    void addConnectionMutation(){
+    public void addConnectionMutation(){
         NodeGene fromNode, toNode;
         
          //TODO: clean this up, what if fully connected?
@@ -85,10 +84,10 @@ public class Genome {
             toNode = getRandomNode();
          //iterate while they are the same node or the're both INPUTS/OUTPUTS
         }while(fromNode == toNode || 
-            ((fromNode.type == toNode.type) && fromNode.type != NodeType.HIDDEN) ||
+            ((fromNode.type == toNode.type) && fromNode.type != TYPE.HIDDEN) ||
             fromNode.isConnected(toNode)); //repeat if they're connected
         
-        boolean reversed = fromNode.type == NodeType.OUTPUT || toNode.type == NodeType.INPUT;
+        boolean reversed = fromNode.type == TYPE.OUTPUT || toNode.type == TYPE.INPUT;
         
         if(reversed)
             addConnectionGene(toNode, fromNode, random.nextDouble());
@@ -119,5 +118,21 @@ public class Genome {
         }
         
         return child;
+    }
+
+    public double getFitness() {
+        return fitness;
+    }
+
+    public void setFitness(double fitness) {
+        this.fitness = fitness;
+    }
+
+    public HashMap<Integer, ConnectionGene> getConnectionGenes() {
+        return connectionGenes;
+    }
+
+    public HashMap<Integer, NodeGene> getNodeGenes() {
+        return nodeGenes;
     }
 }

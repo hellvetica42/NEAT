@@ -1,4 +1,4 @@
-package com.hydrozoa.hydroneat.test;
+package com.test.print;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -11,10 +11,10 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
-import com.hydrozoa.hydroneat.ConnectionGene;
-import com.hydrozoa.hydroneat.Genome;
-import com.hydrozoa.hydroneat.NodeGene;
-import com.hydrozoa.hydroneat.NodeGene.TYPE;
+import com.neat.ConnectionGene;
+import com.neat.Genome;
+import com.neat.NodeGene;
+import com.neat.TYPE;
 
 public class GenomePrinter {
 	
@@ -53,11 +53,11 @@ public class GenomePrinter {
 		
 		g.setColor(Color.BLACK);
 		for (ConnectionGene gene : genome.getConnectionGenes().values()) {
-			if (!gene.isExpressed()) {
+			if (!gene.isEnabled()){
 				continue;
 			}
-			Point inNode = nodeGenePositions.get(gene.getInNode());
-			Point outNode = nodeGenePositions.get(gene.getOutNode());
+			Point inNode = nodeGenePositions.get(gene.getFromNode().getId());
+			Point outNode = nodeGenePositions.get(gene.getToNode().getId());
 			
 			Point lineVector = new Point((int)((outNode.x - inNode.x) * 0.95f), (int)((outNode.y - inNode.y) * 0.95f));
 			
@@ -80,7 +80,7 @@ public class GenomePrinter {
 		}
 	}
 	
-	private static int countNodesByType(Genome genome, TYPE type) {
+	public static int countNodesByType(Genome genome, TYPE type) {
 		int c = 0;
 		for (NodeGene node : genome.getNodeGenes().values()) {
 			if (node.getType() == type) {
