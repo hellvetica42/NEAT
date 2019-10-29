@@ -34,8 +34,14 @@ public class GenomePrintTest {
         genome.addConnectionGene(genome.getNodeGenes().get(1), genome.getNodeGenes().get(5));
 
         GenomePrinter.printGenome(genome, "./before.png");
+        
+        System.out.println(genome.isFullyConnected());
 
-        genome.addNodeMutation();
+        genome.addConnectionMutation();
+
+        System.out.println(genome.isFullyConnected());
+
+        genome.addConnectionMutation();
 
         GenomePrinter.printGenome(genome, "./after.png");
     }

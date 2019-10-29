@@ -14,6 +14,11 @@ public class ConnectionGene {
     final int innovation;
     Random random;
     
+    public ConnectionGene(NodeGene from, NodeGene to, int innovation, double weight, boolean enable, Random random) {
+        this(from, to, innovation, weight, random);
+        this.enable = enable;
+    }
+
     public ConnectionGene(NodeGene from, NodeGene to, int innovation, double weight, Random random) {
         this.from = from;
         this.to = to;
@@ -40,7 +45,7 @@ public class ConnectionGene {
     }
 
     public ConnectionGene copy() {
-        return new ConnectionGene(from, to, innovation, random);
+        return new ConnectionGene(from, to, innovation, weight, enable, random);
     }
     
    public NodeGene getFromNode(){
