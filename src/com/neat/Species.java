@@ -1,6 +1,24 @@
 package com.neat;
 
+import java.util.ArrayList;
+
 public class Species{
+
+    final double fitnessTreshold = 0.5;
+
+    ArrayList<Genome> genomes = new ArrayList<>();
+
+    public double getAdjustedFitness(Genome genome){
+        int count = 0; //represents number of genomes in the same species as argument
+
+        for(Genome g : genomes){
+            if(g != genome){
+               count += getCompatibilityDistance(genome, g) > fitnessTreshold ? 0 : 1;
+            }
+        }
+
+        return genome.getFitness() / count;
+    }
 
     public static double getCompatibilityDistance(Genome genome1, Genome genome2){
         double dis = 0;
