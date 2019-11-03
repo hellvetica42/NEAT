@@ -33,17 +33,18 @@ public class GenomePrintTest {
         genome.addConnectionGene(genome.getNodeGenes().get(5), genome.getNodeGenes().get(4));
         genome.addConnectionGene(genome.getNodeGenes().get(1), genome.getNodeGenes().get(5));
 
-        GenomePrinter.printGenome(genome, "./before.png");
+        GenomePrinter.printGenome(genome, "./src/com/test/print/before.png");
         
-        System.out.println(genome.isFullyConnected());
+        for(int i = 0; i < 100; i++){
+            if(new Random().nextBoolean()){
+                genome.addConnectionMutation();
+            }
+            else{
+                genome.addNodeMutation();
+            }
+        }
 
-        genome.addConnectionMutation();
-
-        System.out.println(genome.isFullyConnected());
-
-        genome.addConnectionMutation();
-
-        GenomePrinter.printGenome(genome, "./after.png");
+        GenomePrinter.printGenome(genome, "./src/com/test/print/after.png");
     }
     
 }

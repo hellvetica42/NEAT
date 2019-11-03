@@ -1,57 +1,56 @@
 package com.neat;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Species{
 
-    final double fitnessTreshold = 0.5;
-
     ArrayList<Genome> genomes = new ArrayList<>();
+    Genome mascot;
 
-    public double getAdjustedFitness(Genome genome){
-        int count = 0; //represents number of genomes in the same species as argument
+    double speciesFitness = 0;
+    Random random;
 
+    Species(Random random){
+       this.random = random;
+    }
+    
+    void updateFitness(){
+        speciesFitness = 0;
         for(Genome g : genomes){
-            if(g != genome){
-               count += getCompatibilityDistance(genome, g) > fitnessTreshold ? 0 : 1;
-            }
+           speciesFitness += g.getFitness();
         }
-
-        return genome.getFitness() / count;
+        speciesFitness /= genomes.size();
     }
 
-    public static double getCompatibilityDistance(Genome genome1, Genome genome2){
-        double dis = 0;
+    double getFitness(){
+        return getFitness(false);
+    }
 
-        final double c1 = 1, c2 = 1, c3 = 1;
+    double getFitness(boolean update){
+        if(update)
+            updateFitness();
 
-        int inno1 = genome1.getYougestConnectionGene();
-        int inno2 = genome2.getYougestConnectionGene();
+        return speciesFitness;
+    }
 
-        int excessGenes = Math.abs(inno1 - inno2);
+    int getSize(){
+        return genomes.size();
+    }
 
-        int maxInnovation = Math.max(inno1, inno2);
+    ArrayList<Genome> getGenomes(){
+        return genomes;
+    }
 
-        int matchingGenes = 0;
+    void addGenome(Genome g){
+        genomes.add(g);
+    }
 
-        double weightDif = 0;
+    Genome getMascot(){
+        return mascot;
+    }
 
-        for(int i = 1; i <= maxInnovation; i++){
-            if(genome1.getConnectionGenes().keySet().contains(i) &&
-               genome2.getConnectionGenes().keySet().contains(i)){
-                matchingGenes++;
-
-                weightDif += Math.abs(genome1.getConnectionGenes().get(i).getWeight() -
-                                      genome2.getConnectionGenes().get(i).getWeight());
-            }
-        }
-
-        double avgWeightDif = weightDif/matchingGenes;
-
-        int disjointGenes = maxInnovation - matchingGenes - excessGenes;
-
-        dis = c1*excessGenes + c2*disjointGenes + c3*avgWeightDif;
-
-        return dis;
+    void pickMascot(){
+       mascot = genomes.get(random.nextInt(genomes.size()));
     }
 }

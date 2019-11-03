@@ -66,10 +66,10 @@ public class GenomePrinter {
 			g.drawString(String.format("%.2f", gene.getWeight()), (int)(inNode.x+lineVector.x*0.25f+5), (int)(inNode.y+lineVector.y*0.25f));
 		}
 		
-		g.setColor(Color.WHITE);
+		g.setColor(Color.RED);
 		for (NodeGene nodeGene : genome.getNodeGenes().values()) {
 			Point p = nodeGenePositions.get(nodeGene.getId());
-			g.drawString(""+nodeGene.getId(), p.x, p.y);
+			g.drawString(""+nodeGene.getId(), p.x-10, p.y);
 		}
 		
 		
