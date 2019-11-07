@@ -38,4 +38,8 @@ public class Evaluator{
 
         return dis;
     }
+
+    public static boolean belongsInSpecies(Genome genome, Species species){
+        return (getCompatibilityDistance(genome, species.getMascot()) < 0.5);
+    }
 }

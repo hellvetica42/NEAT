@@ -42,7 +42,7 @@ public class Population{
        for(Genome g : population){
             boolean foundSpecies = false;
             for(Species s : species){
-                if(Evaluator.getCompatibilityDistance(g, s.mascot) < 0.5){
+                if(Evaluator.belongsInSpecies(g, s)){
                     foundSpecies = true;
                     s.addGenome(g);
                     speciesMap.put(g, s);

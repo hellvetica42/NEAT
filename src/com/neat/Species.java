@@ -47,6 +47,9 @@ public class Species{
     }
 
     Genome getMascot(){
+        if(mascot == null){
+            pickMascot();
+        }
         return mascot;
     }
 
