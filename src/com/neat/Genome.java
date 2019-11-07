@@ -40,17 +40,24 @@ public class Genome {
 
     public NodeGene addNodeGene(TYPE type){
         NodeGene newNode = new NodeGene(nodeInnovation++, type, random);
+        newNode.addFreeNodes(nodeGenes.values());  
         updateNodeGenes(newNode);
+
         nodeGenes.put(newNode.innovation, newNode);
+
         return newNode;
     }
     
     public NodeGene addNodeGene(NodeGene newNode){
         updateNodeGenes(newNode);
+        newNode.addFreeNodes(nodeGenes.values());
+
         nodeGenes.put(newNode.innovation, newNode);
         return newNode;
     }
 
+    //whenever a new node gene is created we have to tell all other nodes that they can connect to it
+    //we later remove nodes that get connected via connectionGene (in NodeGene) 
     public void updateNodeGenes(NodeGene newNode){
         for(NodeGene gene : nodeGenes.values()){
            gene.addFreeNode(newNode); 
