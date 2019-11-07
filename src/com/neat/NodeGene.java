@@ -17,9 +17,9 @@ public class NodeGene {
     
     ArrayList<ConnectionGene> inputs = new ArrayList<>();
     ArrayList<ConnectionGene> outputs = new ArrayList<>();
-    ArrayList<NodeGene> connectedNodes = new ArrayList<>();
 
-    HashSet<NodeGene> freeNodes = new HashSet<NodeGene>();
+    HashSet<Integer> freeNodes = new HashSet<>();
+    HashSet<Integer> connectedNodes = new HashSet<>();
     
 
     public NodeGene(int innovation, TYPE type, Random random){
@@ -45,7 +45,7 @@ public class NodeGene {
     }
     
     boolean isConnected(NodeGene node){
-        return connectedNodes.contains(node);
+        return connectedNodes.contains(node.getId());
     }
     
     NodeGene copy(){
@@ -61,26 +61,28 @@ public class NodeGene {
     }
 
     public void addFreeNode(NodeGene gene){
-        if(this.type != TYPE.HIDDEN){
+        if(this.type == TYPE.HIDDEN){
+            freeNodes.add(gene.getId());
+        }
+        else{
             if(gene.getType() != this.type)
-                freeNodes.add(gene);
-        }else{
-            freeNodes.add(gene);
+                freeNodes.add(gene.getId());
         }
     }
 
     public void addFreeNodes(Collection<NodeGene> genes){
         for(NodeGene gene : genes){
-            if(this.type != TYPE.HIDDEN){
+            if(this.type == TYPE.HIDDEN){
+                freeNodes.add(gene.getId());
+            }
+            else{
                 if(gene.getType() != this.type)
-                    freeNodes.add(gene);
-            }else{
-                freeNodes.add(gene);
+                    freeNodes.add(gene.getId());
             }
         }
     }
 
-    public HashSet<NodeGene> getFreeNodes(){
+    public HashSet<Integer> getFreeNodes(){
         return freeNodes;
     }
 }

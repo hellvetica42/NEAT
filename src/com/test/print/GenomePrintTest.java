@@ -26,12 +26,12 @@ public class GenomePrintTest {
 
         genome.addNodeGene();
 
-        genome.addConnectionGene(genome.getNodeGenes().get(1), genome.getNodeGenes().get(4));
-        genome.addConnectionGene(genome.getNodeGenes().get(2), genome.getNodeGenes().get(4));
-        genome.addConnectionGene(genome.getNodeGenes().get(3), genome.getNodeGenes().get(4));
-        genome.addConnectionGene(genome.getNodeGenes().get(2), genome.getNodeGenes().get(5));
-        genome.addConnectionGene(genome.getNodeGenes().get(5), genome.getNodeGenes().get(4));
-        genome.addConnectionGene(genome.getNodeGenes().get(1), genome.getNodeGenes().get(5));
+        genome.addConnectionGene(genome.getNodeGenes().get(1).getId(), genome.getNodeGenes().get(4).getId());
+        genome.addConnectionGene(genome.getNodeGenes().get(2).getId(), genome.getNodeGenes().get(4).getId());
+        genome.addConnectionGene(genome.getNodeGenes().get(3).getId(), genome.getNodeGenes().get(4).getId());
+        genome.addConnectionGene(genome.getNodeGenes().get(2).getId(), genome.getNodeGenes().get(5).getId());
+        genome.addConnectionGene(genome.getNodeGenes().get(5).getId(), genome.getNodeGenes().get(4).getId());
+        genome.addConnectionGene(genome.getNodeGenes().get(1).getId(), genome.getNodeGenes().get(5).getId());
 
         GenomePrinter.printGenome(genome, "./src/com/test/print/before.png");
         

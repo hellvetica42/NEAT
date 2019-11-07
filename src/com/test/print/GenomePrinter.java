@@ -56,8 +56,8 @@ public class GenomePrinter {
 			if (!gene.isEnabled()){
 				continue;
 			}
-			Point inNode = nodeGenePositions.get(gene.getFromNode().getId());
-			Point outNode = nodeGenePositions.get(gene.getToNode().getId());
+			Point inNode = nodeGenePositions.get(gene.getFromNodeId());
+			Point outNode = nodeGenePositions.get(gene.getToNodeId());
 			
 			Point lineVector = new Point((int)((outNode.x - inNode.x) * 0.95f), (int)((outNode.y - inNode.y) * 0.95f));
 			

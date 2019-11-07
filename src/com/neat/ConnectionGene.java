@@ -7,28 +7,26 @@ import java.util.Random;
  * @author Petar
  */
 public class ConnectionGene {
-    NodeGene from, to;
+    int from, to;
     
     double weight;
     boolean enable = true;
     final int innovation;
     Random random;
     
-    public ConnectionGene(NodeGene from, NodeGene to, int innovation, double weight, boolean enable, Random random) {
+    public ConnectionGene(int from, int to, int innovation, double weight, boolean enable, Random random) {
         this(from, to, innovation, weight, random);
         this.enable = enable;
     }
 
-    public ConnectionGene(NodeGene from, NodeGene to, int innovation, double weight, Random random) {
+    public ConnectionGene(int from, int to, int innovation, double weight, Random random) {
         this.from = from;
         this.to = to;
         this.innovation = innovation;
         this.weight = weight;
         this.random = random;
-        from.connectOutput(this);
-        to.connectInput(this);
     }
-    public ConnectionGene(NodeGene from, NodeGene to, int innovation, Random random) {
+    public ConnectionGene(int from, int to, int innovation, Random random) {
         this(from, to, innovation, random.nextDouble(), random);
     }
     
@@ -48,11 +46,11 @@ public class ConnectionGene {
         return new ConnectionGene(from, to, innovation, weight, enable, random);
     }
     
-   public NodeGene getFromNode(){
+   public int getFromNodeId(){
        return from;
    } 
 
-   public NodeGene getToNode(){
+   public int getToNodeId(){
        return to;
    }
 

@@ -12,11 +12,14 @@ public class Genome {
     Random random; 
     
     double fitness = 0;
-
     
     int inputCount, outputCount;
     int connectionInnovation = 1, nodeInnovation = 1;
     
+    HashMap<Integer, ConnectionGene> connectionGenes;
+
+    HashMap<Integer, NodeGene> nodeGenes;
+
     public Genome(int inputCount, int outputCount){
         this.inputCount = inputCount;
         this.outputCount = outputCount;
@@ -29,11 +32,8 @@ public class Genome {
         this(1,1);
     }
 
-    HashMap<Integer, ConnectionGene> connectionGenes;
-
-    HashMap<Integer, NodeGene> nodeGenes;
     
-
+//////NODES////////////////
     public NodeGene addNodeGene(){
         return addNodeGene(TYPE.HIDDEN);
     }
@@ -57,65 +57,6 @@ public class Genome {
         }
     }
     
-    public ConnectionGene addConnectionGene(ConnectionGene newConnectionGene){
-        connectionGenes.put(newConnectionGene.innovation, newConnectionGene);
-        return newConnectionGene;
-    }
-    
-    public ConnectionGene addConnectionGene(NodeGene from, NodeGene to){
-        return addConnectionGene(from, to, random.nextDouble());
-    }
-
-    public ConnectionGene addConnectionGene(NodeGene from, NodeGene to, int innovation, boolean enable){
-        return addConnectionGene(from, to, innovation, random.nextDouble(), enable);
-    }
-
-    public ConnectionGene addConnectionGene(NodeGene from, NodeGene to, int innovation, double weight, boolean enable){
-        ConnectionGene newConnectoionGene = new ConnectionGene(from, to, innovation, weight, random);
-        if(!enable)
-            newConnectoionGene.disable();
-        connectionGenes.put(innovation, newConnectoionGene);
-        return newConnectoionGene;
-    }
-    
-    public ConnectionGene addConnectionGene(NodeGene from, NodeGene to, double weight){
-        return addConnectionGene(from, to, connectionInnovation++, weight, true);
-    }
-
-    public void removeConnectionGene(int key){
-        connectionGenes.remove(key);
-    }
-
-    public void disableConnectionGene(int key){
-        connectionGenes.get(key).disable();
-    }
-
-    public void enableConnectionGene(int key){
-        connectionGenes.get(key).enable();
-    }
-    
-    public void addNodeMutation(){
-        ConnectionGene toDisable = getRandomConnectionGene();
-        toDisable.disable();
-        NodeGene newNode = addNodeGene();
-        addConnectionGene(toDisable.from, newNode, 1);
-        addConnectionGene(newNode, toDisable.to, toDisable.weight);
-    }
-    
-    NodeGene getRandomNode(){
-        Integer i;
-        i = (Integer)nodeGenes.keySet().toArray()[random.nextInt(nodeGenes.keySet().size())];
-
-        return nodeGenes.get(i);
-    }
-
-    ConnectionGene getRandomConnectionGene(){
-        Integer i;
-        i = (Integer)connectionGenes.keySet().toArray()[random.nextInt(connectionGenes.keySet().size())];
-
-        return connectionGenes.get(i);
-    }
-    
     public void addConnectionMutation(){
         NodeGene fromNode, toNode;
         
@@ -134,11 +75,90 @@ public class Genome {
         boolean reversed = fromNode.type == TYPE.OUTPUT || toNode.type == TYPE.INPUT;
         
         if(reversed)
-            addConnectionGene(toNode, fromNode, random.nextDouble());
+            addConnectionGene(toNode.getId(), fromNode.getId(), random.nextDouble());
         else
-            addConnectionGene(fromNode, toNode, random.nextDouble());
+            addConnectionGene(fromNode.getId(), toNode.getId(), random.nextDouble());
        
     }
+
+    public void addNodeMutation(){
+        ConnectionGene toDisable = getRandomConnectionGene();
+        toDisable.disable();
+        NodeGene newNode = addNodeGene();
+        addConnectionGene(toDisable.getFromNodeId(), newNode.getId(), 1);
+        addConnectionGene(newNode.getId(), toDisable.getToNodeId(),toDisable.weight);
+    }
+    
+    NodeGene getRandomNode(){
+        Integer i;
+        i = (Integer)nodeGenes.keySet().toArray()[random.nextInt(nodeGenes.keySet().size())];
+
+        return nodeGenes.get(i);
+    }
+
+////////////////////////////////
+///////////CONNECTIONS////////////////////
+
+    public ConnectionGene addConnectionGene(int from, int to, int innovation, double weight, boolean enable){
+        ConnectionGene newConnectionGene = new ConnectionGene(from, to, innovation, weight, random);
+        if(!enable)
+            newConnectionGene.disable();
+
+        addConnectionGene(newConnectionGene);
+
+        return newConnectionGene;
+    }
+
+    public ConnectionGene addConnectionGene(int from, int to, int innovation, boolean enable){
+        return addConnectionGene(from, to, innovation, random.nextDouble(), enable);
+    }
+
+    public ConnectionGene addConnectionGene(int from, int to, double weight){
+        return addConnectionGene(from, to, connectionInnovation++, weight, true);
+    }
+
+    public ConnectionGene addConnectionGene(int from, int to, boolean enable){ 
+        return addConnectionGene(from, to, connectionInnovation++, random.nextDouble(), enable);
+    }
+
+    public ConnectionGene addConnectionGene(int from, int to){
+        return addConnectionGene(from, to, random.nextDouble());
+    }
+
+    public ConnectionGene addConnectionGene(ConnectionGene newConnectionGene){
+        connectionGenes.put(newConnectionGene.innovation, newConnectionGene);
+        
+        if(nodeGenes.keySet().contains(newConnectionGene.from) && nodeGenes.keySet().contains(newConnectionGene.to)){
+            nodeGenes.get(newConnectionGene.from).connectOutput(newConnectionGene);
+            nodeGenes.get(newConnectionGene.to).connectInput(newConnectionGene);
+        }
+        else{
+            newConnectionGene.disable();
+        }
+
+        return newConnectionGene;
+    }
+
+    public void removeConnectionGene(int key){
+        connectionGenes.remove(key);
+    }
+
+    public void disableConnectionGene(int key){
+        connectionGenes.get(key).disable();
+    }
+
+    public void enableConnectionGene(int key){
+        connectionGenes.get(key).enable();
+    }
+    
+
+    ConnectionGene getRandomConnectionGene(){
+        Integer i;
+        i = (Integer)connectionGenes.keySet().toArray()[random.nextInt(connectionGenes.keySet().size())];
+
+        return connectionGenes.get(i);
+    }
+   /////////////////////////////////////////////////////////// 
     
     //parent1 is more fit
     public static Genome Crossover(Genome parent1, Genome parent2, Random random){
@@ -153,30 +173,19 @@ public class Genome {
         
         for(int i = 1; i < youngestGene; i++){
             if(parent1.getConnectionGenes().keySet().contains(i)){
-                if(parent2.getConnectionGenes().keySet().contains(i)){//MATCHING GENE
+                if(parent2.getConnectionGenes().keySet().contains(i)){//MATCHING GENE FORM RANDOM PARENT
+
                     if(random.nextBoolean())
                         child.addConnectionGene(parent1.getConnectionGenes().get(i).copy());
                     else
                         child.addConnectionGene(parent2.getConnectionGenes().get(i).copy());
+
                 }
                 else{
-                    child.addConnectionGene(parent1.getConnectionGenes().get(i).copy());
+                    child.addConnectionGene(parent1.getConnectionGenes().get(i).copy()); //DISJONT AND EXCESS FROM MOST FIT PARENT
                 }
             }
         }
-/*
-        for(Integer innovation : parent1.getConnectionGenes().keySet()){
-            if(parent2.getConnectionGenes().containsKey(innovation)){//MATHCING gene
-                if(random.nextBoolean())
-                    child.addConnectionGene(parent1.getConnectionGenes().get(innovation).copy());
-                else
-                    child.addConnectionGene(parent2.getConnectionGenes().get(innovation).copy());
-            }
-            else{ //DISJOINT or EXCESS genes
-                child.addConnectionGene(parent1.getConnectionGenes().get(innovation).copy());
-            }
-        }
- */       
         return child;
     }
 

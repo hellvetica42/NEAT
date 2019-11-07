@@ -5,3 +5,6 @@ src/com/test/parent1.png
 src/com/test/parent2.png
 before.png
 after.png
+src/com/test/crossover/child.png
+src/com/test/crossover/parent1.png
+src/com/test/crossover/parent2.png

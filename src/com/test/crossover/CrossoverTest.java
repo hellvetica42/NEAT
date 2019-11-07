@@ -21,12 +21,12 @@ public class CrossoverTest{
 
         parent1.addNodeGene();
 
-        parent1.addConnectionGene(parent1.getNodeGenes().get(1), parent1.getNodeGenes().get(4), 1, true);
-        parent1.addConnectionGene(parent1.getNodeGenes().get(2), parent1.getNodeGenes().get(4), 2, false);
-        parent1.addConnectionGene(parent1.getNodeGenes().get(3), parent1.getNodeGenes().get(4), 3, true);
-        parent1.addConnectionGene(parent1.getNodeGenes().get(2), parent1.getNodeGenes().get(5), 4, true);
-        parent1.addConnectionGene(parent1.getNodeGenes().get(5), parent1.getNodeGenes().get(4), 5, true);
-        parent1.addConnectionGene(parent1.getNodeGenes().get(1), parent1.getNodeGenes().get(5), 8, true);
+        parent1.addConnectionGene(parent1.getNodeGenes().get(1).getId(), parent1.getNodeGenes().get(4).getId(), 1, true);
+        parent1.addConnectionGene(parent1.getNodeGenes().get(2).getId(), parent1.getNodeGenes().get(4).getId(), 2, false);
+        parent1.addConnectionGene(parent1.getNodeGenes().get(3).getId(), parent1.getNodeGenes().get(4).getId(), 3, true);
+        parent1.addConnectionGene(parent1.getNodeGenes().get(2).getId(), parent1.getNodeGenes().get(5).getId(), 4, true);
+        parent1.addConnectionGene(parent1.getNodeGenes().get(5).getId(), parent1.getNodeGenes().get(4).getId(), 5, true);
+        parent1.addConnectionGene(parent1.getNodeGenes().get(1).getId(), parent1.getNodeGenes().get(5).getId(), 8, true);
 
 
         Genome parent2 = new Genome();
@@ -40,19 +40,19 @@ public class CrossoverTest{
         parent2.addNodeGene();
         parent2.addNodeGene();
 
-        parent2.addConnectionGene(parent2.getNodeGenes().get(1), parent2.getNodeGenes().get(4), 1, true);
+        parent2.addConnectionGene(parent2.getNodeGenes().get(1).getId(), parent2.getNodeGenes().get(4).getId(), 1, true);
 
-        parent2.addConnectionGene(parent2.getNodeGenes().get(2), parent2.getNodeGenes().get(4), 2, false);
+        parent2.addConnectionGene(parent2.getNodeGenes().get(2).getId(), parent2.getNodeGenes().get(4).getId(), 2, false);
 
-        parent2.addConnectionGene(parent2.getNodeGenes().get(3), parent2.getNodeGenes().get(4), 3, true);
-        parent2.addConnectionGene(parent2.getNodeGenes().get(2), parent2.getNodeGenes().get(5), 4, true);
+        parent2.addConnectionGene(parent2.getNodeGenes().get(3).getId(), parent2.getNodeGenes().get(4).getId(), 3, true);
+        parent2.addConnectionGene(parent2.getNodeGenes().get(2).getId(), parent2.getNodeGenes().get(5).getId(), 4, true);
 
-        parent2.addConnectionGene(parent2.getNodeGenes().get(5), parent2.getNodeGenes().get(4), 5, false);
+        parent2.addConnectionGene(parent2.getNodeGenes().get(5).getId(), parent2.getNodeGenes().get(4).getId(), 5, false);
 
-        parent2.addConnectionGene(parent2.getNodeGenes().get(5), parent2.getNodeGenes().get(6), 6, true);
-        parent2.addConnectionGene(parent2.getNodeGenes().get(6), parent2.getNodeGenes().get(4), 7, true);
-        parent2.addConnectionGene(parent2.getNodeGenes().get(3), parent2.getNodeGenes().get(5), 9, true);
-        parent2.addConnectionGene(parent2.getNodeGenes().get(1), parent2.getNodeGenes().get(6), 10, true);
+        parent2.addConnectionGene(parent2.getNodeGenes().get(5).getId(), parent2.getNodeGenes().get(6).getId(), 6, true);
+        parent2.addConnectionGene(parent2.getNodeGenes().get(6).getId(), parent2.getNodeGenes().get(4).getId(), 7, true);
+        parent2.addConnectionGene(parent2.getNodeGenes().get(3).getId(), parent2.getNodeGenes().get(5).getId(), 9, true);
+        parent2.addConnectionGene(parent2.getNodeGenes().get(1).getId(), parent2.getNodeGenes().get(6).getId(), 10, true);
 
 
         GenomePrinter.printGenome(parent1, "./src/com/test/crossover/parent1.png");
