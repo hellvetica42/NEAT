@@ -1,8 +1,12 @@
 package com.neat;
 
+import java.util.Random;
+
 public class Evaluator{
     
-    final double fitnessTreshold = 0.5;
+    final static double fitnessTreshold = 0.5;
+    final static double breedingTreshold = 0.5;
+    static Random random = new Random();
 
     public static double getCompatibilityDistance(Genome genome1, Genome genome2){
         double dis = 0;
@@ -37,6 +41,25 @@ public class Evaluator{
         dis = c1*excessGenes + c2*disjointGenes + c3*avgWeightDif;
 
         return dis;
+    }
+    
+    public static void breedAndReplace(Population p){
+       double fitnessSum = 0;
+       int popSize = p.getSize();
+       for(Species s : p.getSpecies()){
+           fitnessSum += s.getFitness(true);
+       }
+    
+       p.killWorstGenomes(breedingTreshold);
+
+       for(Species s : p.getSpecies()){
+           int newSpeciesSize = (int)Math.floor((s.getFitness() / fitnessSum) * popSize);
+
+           while(s.getSize() < newSpeciesSize){
+               s.addGenome(Genome.Crossover(s.getRandomGenome(), s.getRandomGenome(), random));
+           }
+       }
+
     }
 
     public static boolean belongsInSpecies(Genome genome, Species species){

@@ -8,7 +8,7 @@ import java.util.Random;
  *
  * @author Petar
  */
-public class Genome {
+public class Genome implements Comparable<Genome> {
     Random random; 
     
     double fitness = 0;
@@ -64,30 +64,6 @@ public class Genome {
         }
     }
     
-    public void addConnectionMutation(){
-        NodeGene fromNode, toNode;
-        
-        if(this.isFullyConnected()){
-            return;
-        }
-
-        do{
-            fromNode = getRandomNode();
-            toNode = getRandomNode();
-         //iterate while they are the same node or the're both INPUTS/OUTPUTS
-        }while(fromNode == toNode || 
-            ((fromNode.type == toNode.type) && fromNode.type != TYPE.HIDDEN) ||
-            fromNode.isConnected(toNode)); //repeat if they're connected
-        
-        boolean reversed = fromNode.type == TYPE.OUTPUT || toNode.type == TYPE.INPUT;
-        
-        if(reversed)
-            addConnectionGene(toNode.getId(), fromNode.getId(), random.nextDouble());
-        else
-            addConnectionGene(fromNode.getId(), toNode.getId(), random.nextDouble());
-       
-    }
-
     public void addNodeMutation(){
         ConnectionGene toDisable = getRandomConnectionGene();
         toDisable.disable();
@@ -165,6 +141,31 @@ public class Genome {
 
         return connectionGenes.get(i);
     }
+
+    public void addConnectionMutation(){
+        NodeGene fromNode, toNode;
+        
+        if(this.isFullyConnected()){
+            return;
+        }
+
+        do{
+            fromNode = getRandomNode();
+            toNode = getRandomNode();
+         //iterate while they are the same node or the're both INPUTS/OUTPUTS
+        }while(fromNode == toNode || 
+            ((fromNode.type == toNode.type) && fromNode.type != TYPE.HIDDEN) ||
+            fromNode.isConnected(toNode)); //repeat if they're connected
+        
+        boolean reversed = fromNode.type == TYPE.OUTPUT || toNode.type == TYPE.INPUT;
+        
+        if(reversed)
+            addConnectionGene(toNode.getId(), fromNode.getId(), random.nextDouble());
+        else
+            addConnectionGene(fromNode.getId(), toNode.getId(), random.nextDouble());
+       
+    }
+
    /////////////////////////////////////////////////////////// 
     
     //parent1 is more fit
@@ -226,5 +227,15 @@ public class Genome {
             i = a>i ? a : i;
         }
         return i;
+    }
+
+    @Override
+    public int compareTo(Genome arg0) {
+        if(this.fitness < arg0.getFitness())
+            return -1;
+        else if(this.fitness > arg0.getFitness())
+            return 1;
+        else
+            return 0;
     }
 }

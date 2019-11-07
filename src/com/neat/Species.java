@@ -1,6 +1,7 @@
 package com.neat;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class Species{
@@ -10,8 +11,8 @@ public class Species{
 
     double speciesFitness = 0;
     Random random;
-
-    Species(Random random){
+ 
+    public Species(Random random){
        this.random = random;
     }
     
@@ -34,16 +35,26 @@ public class Species{
         return speciesFitness;
     }
 
-    int getSize(){
+    public int getSize(){
         return genomes.size();
     }
 
-    ArrayList<Genome> getGenomes(){
+    public ArrayList<Genome> getGenomes(){
         return genomes;
     }
 
-    void addGenome(Genome g){
+    public void addGenome(Genome g){
         genomes.add(g);
+    }
+
+    public void killWorstGenomes(double percentage){
+        int genomesToKill = (int)Math.floor((double)genomes.size()*percentage);
+        Collections.sort(genomes);
+        
+        for(int i = 0; i < genomesToKill; i++){
+            genomes.remove(0);
+        }
+
     }
 
     Genome getMascot(){
@@ -55,5 +66,9 @@ public class Species{
 
     void pickMascot(){
        mascot = genomes.get(random.nextInt(genomes.size()));
+    }
+
+    Genome getRandomGenome(){
+        return genomes.get(random.nextInt(genomes.size()));
     }
 }

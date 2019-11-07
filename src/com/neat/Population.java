@@ -24,6 +24,10 @@ public class Population{
         return species;
     }
 
+    public int getSize(){
+        return population.size();
+    }
+
     Species createNewSpecies(){
         Species s = new Species(random);
         species.add(s);
@@ -34,6 +38,16 @@ public class Population{
         if(species.contains(s)){
             species.remove(s);
         }
+    }
+
+    void killWorstGenomes(double treshold){
+        for(Species s : species){
+            s.killWorstGenomes(treshold);
+        }
+    }
+
+    Species getRandomSpecies(){
+        return species.get(random.nextInt(species.size()));
     }
     
     void speciate(){
