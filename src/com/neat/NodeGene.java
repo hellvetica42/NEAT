@@ -33,15 +33,19 @@ public class NodeGene {
     }
     
     void connectInput(ConnectionGene in){
-        inputs.add(in);
-        freeNodes.remove(in.from);
-        connectedNodes.add(in.from);
+        if(this.type != TYPE.INPUT){
+            inputs.add(in);
+            freeNodes.remove(in.from);
+            connectedNodes.add(in.from);
+        }
     }
     
     void connectOutput(ConnectionGene out){
-        outputs.add(out);
-        freeNodes.remove(out.to);
-        connectedNodes.add(out.to);
+        if(this.type != TYPE.OUTPUT){
+            outputs.add(out);
+            freeNodes.remove(out.to);
+            connectedNodes.add(out.to);
+        }
     }
     
     boolean isConnected(NodeGene node){

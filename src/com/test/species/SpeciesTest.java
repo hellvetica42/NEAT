@@ -1,7 +1,6 @@
 package com.test.species;
 
 import java.util.Random;
-import java.util.ArrayList;
 import java.util.Collections;
 
 import com.neat.Genome;

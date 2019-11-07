@@ -2,6 +2,8 @@ package com.test.print;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.BasicStroke;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -18,10 +20,10 @@ import com.neat.TYPE;
 
 public class GenomePrinter {
 	
-	public static void printGenome(Genome genome, String path) {
+	public static BufferedImage getImage(Genome genome) {
 		Random r = new Random();
 		HashMap<Integer, Point> nodeGenePositions = new HashMap<Integer, Point>();
-		int nodeSize = 20;
+		int nodeSize = 40;
 		int connectionSizeBulb = 6;
 		int imageSize = 512;
 		
@@ -61,6 +63,8 @@ public class GenomePrinter {
 			
 			Point lineVector = new Point((int)((outNode.x - inNode.x) * 0.95f), (int)((outNode.y - inNode.y) * 0.95f));
 			
+			Graphics2D g2d = (Graphics2D) g;
+			g2d.setStroke(new BasicStroke(5));
 			g.drawLine(inNode.x, inNode.y, inNode.x+lineVector.x, inNode.y+lineVector.y);
 			g.fillRect(inNode.x+lineVector.x-connectionSizeBulb/2, inNode.y+lineVector.y-connectionSizeBulb/2, connectionSizeBulb, connectionSizeBulb);
 			g.drawString(String.format("%.2f", gene.getWeight()), (int)(inNode.x+lineVector.x*0.25f+5), (int)(inNode.y+lineVector.y*0.25f));
@@ -71,13 +75,22 @@ public class GenomePrinter {
 			Point p = nodeGenePositions.get(nodeGene.getId());
 			g.drawString(""+nodeGene.getId(), p.x-10, p.y);
 		}
+
+		g.drawRect(0, 0, imageSize, imageSize);
 		
+		return image;
 		
+	}
+
+	public static void printGenome(Genome genome, String path){
+
+		BufferedImage image = getImage(genome);
 		try {
 			ImageIO.write(image, "PNG", new File(path));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 	}
 	
 	public static int countNodesByType(Genome genome, TYPE type) {

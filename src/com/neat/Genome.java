@@ -1,5 +1,6 @@
 package com.neat;
 
+import java.util.Map;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -21,15 +22,50 @@ public class Genome implements Comparable<Genome> {
     HashMap<Integer, NodeGene> nodeGenes;
 
     public Genome(int inputCount, int outputCount){
+        random = new Random();
         this.inputCount = inputCount;
         this.outputCount = outputCount;
         connectionGenes = new HashMap<>();
         nodeGenes = new HashMap<>();
-        random = new Random();
+
+        for(int i = 0; i < inputCount; i++){
+            addNodeGene(TYPE.INPUT);
+        }
+
+        for(int i = 0; i < outputCount; i++){
+            addNodeGene(TYPE.OUTPUT);
+        }
+
+        this.fullyConnect();
+
     }
 
     public Genome(){
         this(1,1);
+    }
+
+    public Genome copy(){
+        Genome g = new Genome(this.inputCount, this.outputCount);
+        g.connectionInnovation = this.connectionInnovation;
+        g.nodeInnovation = this.nodeInnovation;
+
+        for(Map.Entry<Integer, ConnectionGene> entry : this.connectionGenes.entrySet()){
+            g.connectionGenes.put(entry.getKey(), entry.getValue().copy());
+        }
+
+        for(Map.Entry<Integer, NodeGene> entry : this.nodeGenes.entrySet()){
+            g.nodeGenes.put(entry.getKey(), entry.getValue().copy());
+        }
+
+        return g;
+
+    }
+
+    void fullyConnect(){
+        //TODO: Inneficient - make this better
+        while(!this.isFullyConnected()){
+            this.addConnectionMutation();
+        }
     }
 
     
@@ -73,10 +109,10 @@ public class Genome implements Comparable<Genome> {
     }
     
     NodeGene getRandomNode(){
-        Integer i;
-        i = (Integer)nodeGenes.keySet().toArray()[random.nextInt(nodeGenes.keySet().size())];
+        Object[] keys = nodeGenes.keySet().toArray();
+        Integer key = (Integer)keys[random.nextInt(keys.length)];
 
-        return nodeGenes.get(i);
+        return nodeGenes.get(key);
     }
 
 ////////////////////////////////

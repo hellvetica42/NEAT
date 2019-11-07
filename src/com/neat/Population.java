@@ -8,13 +8,21 @@ import java.util.Random;
 public class Population{
     Random random;
 
+    ArrayList<Genome> population = new ArrayList<>();
+    ArrayList<Species> species = new ArrayList<>();
+    Map<Genome, Species> speciesMap = new HashMap<>();
+
+    public Population(Genome sample, int size, Random random){
+        this.random = random;
+        for(int i = 0; i < size; i++){
+            population.add(sample.copy());
+        }
+    }
+
     Population(Random random){
         this.random = random;
     }
 
-    ArrayList<Genome> population = new ArrayList<>();
-    ArrayList<Species> species = new ArrayList<>();
-    Map<Genome, Species> speciesMap = new HashMap<>();
 
     double getAdjustedFitness(Genome g){
         return g.getFitness() / speciesMap.get(g).getSize();
@@ -70,5 +78,9 @@ public class Population{
                 speciesMap.put(g, s);
             }
        }
+    }
+
+    public ArrayList<Genome> getGenomes(){
+        return population;
     }
 }
