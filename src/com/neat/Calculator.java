@@ -33,16 +33,21 @@ public class Calculator{
                                     .collect(Collectors.toList()));
     }
 
-    public double[] calculate(double... input){
+    public double[] calculate(Double... input){
 
         if(input.length != inputCount) throw new RuntimeException();
 
         double[] output = new double[outputCount];
 
+        hiddenNodes = new ArrayList<>(genome.getNodeGenes().values().stream()
+                                    .filter(n -> n.getType() == TYPE.HIDDEN)
+                                    .sorted(NodeGene.xComparator)
+                                    .collect(Collectors.toList()));
         this.genome.reset();
 
         for(NodeGene i : inputNodes){
-            i.setOutput(output[i.getId()-1]);
+            i.setOutput(input[i.getId()-1]);
+            i.calculate();
         }
 
         for(NodeGene h : hiddenNodes){

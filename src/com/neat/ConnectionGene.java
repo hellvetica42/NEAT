@@ -30,7 +30,7 @@ public class ConnectionGene {
         this.random = random;
     }
     public ConnectionGene(int from, int to, int innovation, Random random) {
-        this(from, to, innovation, random.nextDouble(), random);
+        this(from, to, innovation, random.nextDouble()*2 - 1, random);
     }
     
     void setEnable(boolean e){

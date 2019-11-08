@@ -87,6 +87,8 @@ public class Genome implements Comparable<Genome> {
         for(ConnectionGene c : connectionGenes.values()){
             c.reset();
         }
+
+        this.fitness = 0;
     }
 
     void fullyConnect(){
