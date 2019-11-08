@@ -14,6 +14,8 @@ public class NodeGene {
     Random random;
     
     TYPE type;
+
+    double x, y;
     
     ArrayList<ConnectionGene> inputs = new ArrayList<>();
     ArrayList<ConnectionGene> outputs = new ArrayList<>();
@@ -26,6 +28,12 @@ public class NodeGene {
         this.innovation = innovation;
         this.type = type;
         this.random = random;
+        if(this.type == TYPE.INPUT)
+            this.x = 0;
+        else if(this.type == TYPE.OUTPUT)
+            this.x = 1;
+
+        this.y = this.random.nextDouble();
     }
     public NodeGene(int innovation, Random random){
         this(innovation, TYPE.HIDDEN, random);
@@ -88,5 +96,21 @@ public class NodeGene {
 
     public HashSet<Integer> getFreeNodes(){
         return freeNodes;
+    }
+
+    void setX(double x){
+        this.x = x;
+    }
+
+    void setY(double y){
+        this.y = y;
+    }
+
+    public double getX(){
+        return x;
+    }
+
+    public double getY(){
+        return y;
     }
 }

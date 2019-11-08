@@ -8,6 +8,7 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -24,17 +25,28 @@ public class GenomePrinter {
 		Random r = new Random();
 		HashMap<Integer, Point> nodeGenePositions = new HashMap<Integer, Point>();
 		int nodeSize = 40;
-		int connectionSizeBulb = 6;
-		int imageSize = 512;
+		int connectionSizeBulb = 10;
+		int width = 1024;
+		int height = 512;
 		
-		BufferedImage image = new BufferedImage(512, 512, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		
 		Graphics g = image.getGraphics();
-		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, imageSize, imageSize);
+		Graphics2D g2d = (Graphics2D) g;
+
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, width, height);
 		
-		g.setColor(Color.BLUE);
+		g.setColor(Color.cyan);
+		int inputNodes = genome.inputCount;
+		int outputNodes = genome.outputCount;
+		int hiddenNodes = genome.getNodeGenes().size() - inputNodes - outputNodes;
+
+		int inCount = 0;
+		int outCount = 0;
+
 		for (NodeGene gene : genome.getNodeGenes().values()) {
+			/*
 			if (gene.getType() == TYPE.INPUT) {
 				float x = ((float)gene.getId()/((float)countNodesByType(genome, TYPE.INPUT)+1f)) * imageSize;
 				float y = imageSize-nodeSize/2;
@@ -51,9 +63,25 @@ public class GenomePrinter {
 				g.fillOval((int)(x-nodeSize/2), (int)(y-nodeSize/2), nodeSize, nodeSize);
 				nodeGenePositions.put(gene.getId(), new Point((int)x,(int)y));
 			}
+			*/
+
+			double x = (gene.getX()*(width-nodeSize) + nodeSize/2);
+			double y = gene.getY()*height;
+
+			if(gene.getType() == TYPE.INPUT){
+				y = (height/(inputNodes+1)) * ++inCount;
+			}
+			else if(gene.getType() == TYPE.OUTPUT){
+				y = (height/(outputNodes+1)) * ++outCount;
+			}
+
+			
+			g2d.setStroke(new BasicStroke(9));
+			g.drawOval((int)(x-nodeSize/2), (int)(y-nodeSize/2), nodeSize, nodeSize);
+			nodeGenePositions.put(gene.getId(), new Point((int)x,(int)y));
 		}
 		
-		g.setColor(Color.BLACK);
+		g.setColor(Color.WHITE);
 		for (ConnectionGene gene : genome.getConnectionGenes().values()) {
 			if (!gene.isEnabled()){
 				continue;
@@ -63,8 +91,7 @@ public class GenomePrinter {
 			
 			Point lineVector = new Point((int)((outNode.x - inNode.x) * 0.95f), (int)((outNode.y - inNode.y) * 0.95f));
 			
-			Graphics2D g2d = (Graphics2D) g;
-			g2d.setStroke(new BasicStroke(5));
+			g2d.setStroke(new BasicStroke(2));
 			g.drawLine(inNode.x, inNode.y, inNode.x+lineVector.x, inNode.y+lineVector.y);
 			g.fillRect(inNode.x+lineVector.x-connectionSizeBulb/2, inNode.y+lineVector.y-connectionSizeBulb/2, connectionSizeBulb, connectionSizeBulb);
 			g.drawString(String.format("%.2f", gene.getWeight()), (int)(inNode.x+lineVector.x*0.25f+5), (int)(inNode.y+lineVector.y*0.25f));
@@ -75,8 +102,9 @@ public class GenomePrinter {
 			Point p = nodeGenePositions.get(nodeGene.getId());
 			g.drawString(""+nodeGene.getId(), p.x-10, p.y);
 		}
-
-		g.drawRect(0, 0, imageSize, imageSize);
+		
+		g.setColor(Color.DARK_GRAY);
+		g.drawRect(0, 0, width, height);
 		
 		return image;
 		

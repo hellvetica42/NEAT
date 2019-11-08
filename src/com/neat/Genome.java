@@ -14,7 +14,7 @@ public class Genome implements Comparable<Genome> {
     
     double fitness = 0;
     
-    int inputCount, outputCount;
+    public int inputCount, outputCount;
     int connectionInnovation = 1, nodeInnovation = 1;
     
     HashMap<Integer, ConnectionGene> connectionGenes;
@@ -104,8 +104,23 @@ public class Genome implements Comparable<Genome> {
         ConnectionGene toDisable = getRandomConnectionGene();
         toDisable.disable();
         NodeGene newNode = addNodeGene();
-        addConnectionGene(toDisable.getFromNodeId(), newNode.getId(), 1);
-        addConnectionGene(newNode.getId(), toDisable.getToNodeId(),toDisable.weight);
+        double fromNodeX = nodeGenes.get(toDisable.getFromNodeId()).getX();
+        double toNodeX = nodeGenes.get(toDisable.getToNodeId()).getX();
+
+        newNode.setX( (fromNodeX + toNodeX) / 2);
+            
+        if(fromNodeX < toNodeX){
+            addConnectionGene(toDisable.getFromNodeId(), newNode.getId(), 1);
+            addConnectionGene(newNode.getId(), toDisable.getToNodeId(),toDisable.weight);
+        }
+        else if(fromNodeX > toNodeX){
+            addConnectionGene(toDisable.getToNodeId(), newNode.getId(), 1);
+            addConnectionGene(newNode.getId(), toDisable.getFromNodeId(),toDisable.weight);
+        }
+        else{
+            return;
+        }
+
     }
     
     NodeGene getRandomNode(){
@@ -191,9 +206,10 @@ public class Genome implements Comparable<Genome> {
          //iterate while they are the same node or the're both INPUTS/OUTPUTS
         }while(fromNode == toNode || 
             ((fromNode.type == toNode.type) && fromNode.type != TYPE.HIDDEN) ||
-            fromNode.isConnected(toNode)); //repeat if they're connected
+            fromNode.isConnected(toNode) || fromNode.getX() == toNode.getX());//repeat if they're connected
         
-        boolean reversed = fromNode.type == TYPE.OUTPUT || toNode.type == TYPE.INPUT;
+        //boolean reversed = fromNode.type == TYPE.OUTPUT || toNode.type == TYPE.INPUT;
+        boolean reversed = (fromNode.getX() > toNode.getX());
         
         if(reversed)
             addConnectionGene(toNode.getId(), fromNode.getId(), random.nextDouble());
