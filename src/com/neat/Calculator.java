@@ -33,6 +33,7 @@ public class Calculator{
         
         hiddenNodes = new ArrayList<>(genome.getNodeGenes().values().stream()
                                     .filter(n -> n.getType() == TYPE.HIDDEN)
+                                    .sorted(NodeGene.xComparator)
                                     .collect(Collectors.toList()));
     }
 
