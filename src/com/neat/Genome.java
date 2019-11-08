@@ -61,6 +61,16 @@ public class Genome implements Comparable<Genome> {
 
     }
 
+    public void reset(){
+        for(NodeGene n : nodeGenes.values()){
+            n.reset();
+        }
+
+        for(ConnectionGene c : connectionGenes.values()){
+            c.reset();
+        }
+    }
+
     void fullyConnect(){
         //TODO: Inneficient - make this better
         while(!this.isFullyConnected()){
@@ -289,5 +299,13 @@ public class Genome implements Comparable<Genome> {
             return 1;
         else
             return 0;
+    }
+
+    public void setConnectionGenes(HashMap<Integer, ConnectionGene> connectionGenes) {
+        this.connectionGenes = connectionGenes;
+    }
+
+    public void setNodeGenes(HashMap<Integer, NodeGene> nodeGenes) {
+        this.nodeGenes = nodeGenes;
     }
 }

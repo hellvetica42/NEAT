@@ -40,30 +40,11 @@ public class GenomePrinter {
 		g.setColor(Color.cyan);
 		int inputNodes = genome.inputCount;
 		int outputNodes = genome.outputCount;
-		int hiddenNodes = genome.getNodeGenes().size() - inputNodes - outputNodes;
 
 		int inCount = 0;
 		int outCount = 0;
 
 		for (NodeGene gene : genome.getNodeGenes().values()) {
-			/*
-			if (gene.getType() == TYPE.INPUT) {
-				float x = ((float)gene.getId()/((float)countNodesByType(genome, TYPE.INPUT)+1f)) * imageSize;
-				float y = imageSize-nodeSize/2;
-				g.fillOval((int)(x-nodeSize/2), (int)(y-nodeSize/2), nodeSize, nodeSize);
-				nodeGenePositions.put(gene.getId(), new Point((int)x,(int)y));
-			} else if (gene.getType() == TYPE.HIDDEN) {
-				int x = r.nextInt(imageSize-nodeSize*2)+nodeSize;
-				int y = r.nextInt(imageSize-nodeSize*3)+(int)(nodeSize*1.5f);
-				g.fillOval((int)(x-nodeSize/2), (int)(y-nodeSize/2), nodeSize, nodeSize);
-				nodeGenePositions.put(gene.getId(), new Point((int)x,(int)y));
-			} else if (gene.getType() == TYPE.OUTPUT) {
-				int x = r.nextInt(imageSize-nodeSize*2)+nodeSize;
-				int y = nodeSize/2;
-				g.fillOval((int)(x-nodeSize/2), (int)(y-nodeSize/2), nodeSize, nodeSize);
-				nodeGenePositions.put(gene.getId(), new Point((int)x,(int)y));
-			}
-			*/
 
 			double x = (gene.getX()*(width-nodeSize) + nodeSize/2);
 			double y = gene.getY()*height;
