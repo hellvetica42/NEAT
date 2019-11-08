@@ -58,6 +58,24 @@ public class Genome implements Comparable<Genome> {
         }
 
         return g;
+    }
+
+    public void mutate(){
+       if(NEAT.PROBABILITY_MUTATE_CONNECTION > random.nextDouble()){
+            addConnectionMutation();
+       } 
+       if(NEAT.PROBABILITY_MUTATE_NODE > random.nextDouble()){
+           addNodeMutation();
+       } 
+       if(NEAT.PROBABILITY_MUTATE_WEIGHT_SHIFT > random.nextDouble()){
+           pertrubeWeightConnectionMutation();
+       } 
+       if(NEAT.PROBABILITY_MUTATE_WEIGHT_RANDOM > random.nextDouble()){
+           randomWeightConnectionMutation();
+       } 
+       if(NEAT.PROBABILITY_MUTATE_TOGGLE_CONNECTION > random.nextDouble()){
+           toggleConnectionMutation();
+       } 
 
     }
 
@@ -72,7 +90,6 @@ public class Genome implements Comparable<Genome> {
     }
 
     void fullyConnect(){
-        //TODO: Inneficient - make this better
         while(!this.isFullyConnected()){
             this.addConnectionMutation();
         }
@@ -112,7 +129,7 @@ public class Genome implements Comparable<Genome> {
     
     public void addNodeMutation(){
         ConnectionGene toDisable = getRandomConnectionGene();
-        toDisable.disable();
+        toDisable.setEnable(false);
         NodeGene newNode = addNodeGene();
         double fromNodeX = nodeGenes.get(toDisable.getFromNodeId()).getX();
         double toNodeX = nodeGenes.get(toDisable.getToNodeId()).getX();
@@ -145,8 +162,8 @@ public class Genome implements Comparable<Genome> {
 
     public ConnectionGene addConnectionGene(int from, int to, int innovation, double weight, boolean enable){
         ConnectionGene newConnectionGene = new ConnectionGene(from, to, innovation, weight, random);
-        if(!enable)
-            newConnectionGene.disable();
+        
+        newConnectionGene.setEnable(enable);
 
         addConnectionGene(newConnectionGene);
 
@@ -177,7 +194,7 @@ public class Genome implements Comparable<Genome> {
             nodeGenes.get(newConnectionGene.to).connectInput(newConnectionGene);
         }
         else{
-            newConnectionGene.disable();
+            newConnectionGene.setEnable(false);
         }
 
         return newConnectionGene;
@@ -188,11 +205,11 @@ public class Genome implements Comparable<Genome> {
     }
 
     public void disableConnectionGene(int key){
-        connectionGenes.get(key).disable();
+        connectionGenes.get(key).setEnable(false);
     }
 
     public void enableConnectionGene(int key){
-        connectionGenes.get(key).enable();
+        connectionGenes.get(key).setEnable(true);
     }
     
 
@@ -200,7 +217,13 @@ public class Genome implements Comparable<Genome> {
         Integer i;
         i = (Integer)connectionGenes.keySet().toArray()[random.nextInt(connectionGenes.keySet().size())];
 
-        return connectionGenes.get(i);
+        ConnectionGene c = connectionGenes.get(i);
+
+        if(c == null){
+                throw new RuntimeException("Random connection gene is null");
+        }
+
+        return c; 
     }
 
     public void addConnectionMutation(){
@@ -226,6 +249,24 @@ public class Genome implements Comparable<Genome> {
         else
             addConnectionGene(fromNode.getId(), toNode.getId(), random.nextDouble());
        
+    }
+
+    public void pertrubeWeightConnectionMutation(){
+       ConnectionGene c = getRandomConnectionGene();
+
+        c.setWeight(c.getWeight() + (random.nextDouble() * 2 - 1) * NEAT.WEIGHT_SHIFT_STRENGTH);
+    }
+
+    public void randomWeightConnectionMutation(){
+       ConnectionGene c = getRandomConnectionGene();
+
+        c.setWeight((random.nextDouble() * 2 - 1) * NEAT.WEIGHT_RANDOM_STRENGTH);
+    }
+
+    public void toggleConnectionMutation(){
+       ConnectionGene c = getRandomConnectionGene();
+
+       c.setEnable(!c.isEnabled());
     }
 
    /////////////////////////////////////////////////////////// 

@@ -1,10 +1,6 @@
 package com.neat;
 
-import java.lang.Exception;
-import java.util.Collection;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.lang.RuntimeException;
 import java.util.stream.Collectors;
 
@@ -42,6 +38,7 @@ public class Calculator{
         if(input.length != inputCount) throw new RuntimeException();
 
         double[] output = new double[outputCount];
+
         this.genome.reset();
 
         for(NodeGene i : inputNodes){

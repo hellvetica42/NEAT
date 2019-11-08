@@ -3,7 +3,6 @@ package com.test.print;
 import java.util.Random;
 
 import com.neat.Genome;
-import com.neat.TYPE;
 
 /**
  *

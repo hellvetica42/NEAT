@@ -8,9 +8,7 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -22,7 +20,6 @@ import com.neat.TYPE;
 public class GenomePrinter {
 	
 	public static BufferedImage getImage(Genome genome) {
-		Random r = new Random();
 		HashMap<Integer, Point> nodeGenePositions = new HashMap<Integer, Point>();
 		int nodeSize = 40;
 		int connectionSizeBulb = 10;

@@ -33,12 +33,8 @@ public class ConnectionGene {
         this(from, to, innovation, random.nextDouble(), random);
     }
     
-    void disable(){
-        enable = false;
-    }
-    
-    void enable(){
-        enable = true;
+    void setEnable(boolean e){
+        this.enable = e;
     }
 
     public boolean isEnabled(){
@@ -81,5 +77,9 @@ public class ConnectionGene {
        this.activated = false;
        this.activation = 0;
    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
     
 }

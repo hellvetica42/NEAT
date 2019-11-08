@@ -7,12 +7,13 @@ import javax.swing.SwingUtilities;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.io.File;
 
 class Window extends JFrame {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
     Window() {
         setLayout(new FlowLayout());
         getContentPane().setBackground(Color.BLACK);
